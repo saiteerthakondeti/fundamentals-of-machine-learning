@@ -1,0 +1,34 @@
+def candidate_elimination(training_data):
+    specific_h = training_data[0][:-1]
+    general_h = [['?' for _ in range(len(specific_h))] for _ in range(len(specific_h))]
+    
+    for example in training_data:
+        if example[-1] == 'Yes':  # Positive example
+            for i in range(len(specific_h)):
+                if example[i] != specific_h[i]:
+                    specific_h[i] = '?'
+                    general_h[i][i] = '?'
+        else:  # Negative example
+            for i in range(len(specific_h)):
+                if example[i] != specific_h[i]:
+                    general_h[i][i] = specific_h[i]
+                else:
+                    general_h[i][i] = '?'
+    
+    
+    general_h = [h for h in general_h if h != ['?' for _ in range(len(specific_h))]]
+    
+    return specific_h, general_h
+
+
+training_data = [
+    ['Sunny', 'Warm', 'Normal', 'Strong', 'Warm', 'Same', 'Yes'],
+    ['Sunny', 'Warm', 'High', 'Strong', 'Warm', 'Same', 'Yes'],
+    ['Rainy', 'Cold', 'High', 'Strong', 'Warm', 'Change', 'No'],
+    ['Sunny', 'Warm', 'High', 'Strong', 'Cool', 'Change', 'Yes']
+]
+
+
+specific_h, general_h = candidate_elimination(training_data)
+print("Specific hypothesis:", specific_h)
+print("General hypotheses:", general_h)
